@@ -52,7 +52,6 @@ src/main/java/...
 4. Run the application using Maven
 
 ## API Testing
-## API Testing
 
 ### Create Expense
 
