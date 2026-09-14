@@ -9,10 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "expenses")
-public class Expense {
-
-    public enum PaymentMethod { CASH, UPI, CARD, NETBANKING, WALLET }
+@Table(name = "incomes")
+public class Income {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,20 +27,16 @@ public class Expense {
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
 
+    @Column(nullable = false, length = 150)
+    private String source;
+
     @Column(length = 500)
     private String description;
 
     @Column(nullable = false)
     private LocalDate date;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private PaymentMethod paymentMethod;
     @Column(nullable = false)
     private boolean isRecurring = false;
-
-    @Column(length = 500)
-    private String tags;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -52,19 +46,18 @@ public class Expense {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Expense() {
+    public Income() {
     }
 
-    public Expense(Long id, User user, Category category, BigDecimal amount, String description, LocalDate date, PaymentMethod paymentMethod, boolean isRecurring, String tags, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Income(Long id, User user, Category category, BigDecimal amount, String source, String description, LocalDate date, boolean isRecurring, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.category = category;
         this.amount = amount;
+        this.source = source;
         this.description = description;
         this.date = date;
-        this.paymentMethod = paymentMethod;
         this.isRecurring = isRecurring;
-        this.tags = tags;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -101,6 +94,14 @@ public class Expense {
         this.amount = amount;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -117,14 +118,6 @@ public class Expense {
         this.date = date;
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
     public boolean getIsRecurring() {
         return isRecurring;
     }
@@ -139,14 +132,6 @@ public class Expense {
 
     public void setRecurring(boolean isRecurring) {
         this.isRecurring = isRecurring;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -174,11 +159,10 @@ public class Expense {
         private User user;
         private Category category;
         private BigDecimal amount;
+        private String source;
         private String description;
         private LocalDate date;
-        private PaymentMethod paymentMethod;
         private boolean isRecurring = false;
-        private String tags;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
 
@@ -202,6 +186,11 @@ public class Expense {
             return this;
         }
 
+        public Builder source(String source) {
+            this.source = source;
+            return this;
+        }
+
         public Builder description(String description) {
             this.description = description;
             return this;
@@ -212,18 +201,8 @@ public class Expense {
             return this;
         }
 
-        public Builder paymentMethod(PaymentMethod paymentMethod) {
-            this.paymentMethod = paymentMethod;
-            return this;
-        }
-
         public Builder isRecurring(boolean isRecurring) {
             this.isRecurring = isRecurring;
-            return this;
-        }
-
-        public Builder tags(String tags) {
-            this.tags = tags;
             return this;
         }
 
@@ -236,8 +215,8 @@ public class Expense {
             this.updatedAt = updatedAt;
             return this;
         }
-        public Expense build() {
-            return new Expense(id, user, category, amount, description, date, paymentMethod, isRecurring, tags, createdAt, updatedAt);
+        public Income build() {
+            return new Income(id, user, category, amount, source, description, date, isRecurring, createdAt, updatedAt);
         }
     }
 }
